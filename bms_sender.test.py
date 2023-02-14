@@ -1,11 +1,12 @@
 """ This file contains test methods """
 import unittest
 
-class BmsSenderTest(object):
-    """ this class is to run test cases for bms sender """
-    def test_bms_sender(self):
-        """ test bms_sender """
-        return
-    
+def run_tests():
+    loader = unittest.TestLoader()
+    suite = loader.discover(start_dir="test_code", pattern="t_*.py")
+    runner = unittest.TextTestRunner()
+    result = runner.run(suite)
+    return result
+
 if __name__ == "__main__":
-    unittest.main()
+    run_tests()
