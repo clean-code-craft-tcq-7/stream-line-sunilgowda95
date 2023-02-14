@@ -42,16 +42,14 @@ class SimulateBatteryParamsClass(object):
         return values
 
     def __simulate_int_values(self, key):
-        start = self.bms_params_thresholds[key]["min"]
-        end = self.bms_params_thresholds[key]["max"]
-        num_values = self.bms_params_thresholds[key]["count"]
-        return [random.randint(start, end) for _ in range(num_values)]
+        return [random.randint(self.bms_params_thresholds[key]["min"],\
+            self.bms_params_thresholds[key]["max"]) \
+            for _ in range(self.bms_params_thresholds[key]["count"])]
     
     def __simulate_float_values(self, key):
-        start = self.bms_params_thresholds[key]["min"]
-        end = self.bms_params_thresholds[key]["max"]
-        num_values = self.bms_params_thresholds[key]["count"]
-        return [round(random.uniform(start, end),2) for _ in range(num_values)]
+        return [round(random.uniform(self.bms_params_thresholds[key]["min"], \
+            self.bms_params_thresholds[key]["max"]), 2) \
+            for _ in range(self.bms_params_thresholds[key]["count"])]
     
     def get_battery_params(self):
         """ get array of each battery params """
