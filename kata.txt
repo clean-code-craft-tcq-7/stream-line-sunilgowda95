@@ -42,7 +42,7 @@ Breakdown:
        Use Print to send data. Monkey patch print for unit testing.
     5. Packet : JSON format.
         {
-            "data" : {
+            "batt_params" : {
                 "soc" : [<list of 40 values>],
                 "dod" : [<list of 40 values>],
                 "tv" : [<list of 40 values>]
@@ -68,3 +68,7 @@ Integration Test:
     Use JSON document for Input and Output.
     1. Mock/Stub send function.
     2. Initiate sender and validate JSON packet sent to console.
+
+References:
+    1. More information on the battery parameters can be found in :
+      http://web.mit.edu/evt/summary_battery_specifications.pdf
