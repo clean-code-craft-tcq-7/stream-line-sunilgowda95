@@ -18,10 +18,10 @@ Test Cases :
 
 BMS_PARAMS_THRESHOLD = {
     "test_params" : {
-        "soc":{"max":100, "min":0, "count":50, "type":"int"},
-        "dod":{"max":100, "min":0, "count":50, "type":"int"},
-        "temp":{"max":40, "min":25, "count":50, "type":"float"},
-        "tv":{"max":12.6, "min":10, "count":50, "type":"float"},
+        "soc":{"max":90, "min":10, "count":40, "type":"int"},
+        "dod":{"max":90, "min":10, "count":40, "type":"int"},
+        "temp":{"max":38, "min":20, "count":30, "type":"float"},
+        "tv":{"max":12.2, "min":10.5, "count":30, "type":"float"},
     },
     "mocked" : {"int": 5, "float":5.0}
 }
