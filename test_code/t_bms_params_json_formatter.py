@@ -42,9 +42,9 @@ class TestFormatBatteryParamsClass(unittest.TestCase):
         return True
     
     def test_json_formatter_case0(self):
-        input = {}
-        FormatBatteryParamsObject = FormatBatteryParamsClass(input)
-        self.output_json = json.loads(FormatBatteryParamsObject.format_to_json_string())
+        input0 = {}
+        FormatBatteryParamsObject0 = FormatBatteryParamsClass(input0)
+        self.output_json = json.loads(FormatBatteryParamsObject0.format_to_json_string())
         self.assertTrue(self.__check_output_parent_keys())
         self.assertEqual(self.output_json["msg"], "failed")
         self.assertEqual(self.output_json["batt_params"], {})
@@ -59,18 +59,18 @@ class TestFormatBatteryParamsClass(unittest.TestCase):
             {"soc":[]},
         ]
         for input in input_list:
-            FormatBatteryParamsObject = FormatBatteryParamsClass(input)
-            self.output_json = json.loads(FormatBatteryParamsObject.format_to_json_string())
+            FormatBatteryParamsObject1 = FormatBatteryParamsClass(input)
+            self.output_json = json.loads(FormatBatteryParamsObject1.format_to_json_string())
             self.assertTrue(self.__check_output_parent_keys())
             self.assertEqual(self.output_json["msg"], "failed")
             self.assertEqual(self.output_json["batt_params"], {})
             
-    def test_json_formatter_case1(self):
-        input = {"soc":[1,2,3], "dod":[1,2,3], "temp":[1,2,3], "tv":[1,2,3]}
-        FormatBatteryParamsObject = FormatBatteryParamsClass(input)
-        self.output_json = json.loads(FormatBatteryParamsObject.format_to_json_string())
+    def test_json_formatter_case2(self):
+        input2 = {"soc":[1,2,3], "dod":[1,2,3], "temp":[1,2,3], "tv":[1,2,3]}
+        FormatBatteryParamsObject2 = FormatBatteryParamsClass(input2)
+        self.output_json = json.loads(FormatBatteryParamsObject2.format_to_json_string())
         self.assertTrue(self.__check_output_parent_keys())
         self.assertEqual(self.output_json["msg"], "success")
         self.assertTrue(self.__check_output_batt_params_keys())
-        self.assertTrue(self.__check_output_batt_params_key_values(input))
+        self.assertTrue(self.__check_output_batt_params_key_values(input2))
         
