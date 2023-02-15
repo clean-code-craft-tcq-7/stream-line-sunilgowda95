@@ -1,28 +1,59 @@
 import unittest
 from unittest.mock import patch
 
-class TestBmsSenderClass(unittest.TestCase):
+"""
+Input : dictionary containing parent keys "soc", "dod", "temp" and "tv" 
+    with each parent key containing "max", "min", "count", "type"
+Output : dictionary containing "soc", "dod", "temp", "tv" keys
+    with list of random values equal to count defined in Input.
+Test Cases : 
+    1.  Input dictionary with valid param, also mock random module with 
+            fixed values.
+        Output check for all the keys, length of output list, check value
+            of the list using mocked values.
+    2.  Input dictionary with valid param.
+        Output check for all the keys, length of output list, check value
+            of the list are in the given range.
+"""
+
+BMS_PARAMS_THRESHOLD = {
+    "test_params" : {
+        "soc":{"max":100, "min":0, "count":50, "type":"int"},
+        "dod":{"max":100, "min":0, "count":50, "type":"int"},
+        "temp":{"max":40, "min":25, "count":50, "type":"float"},
+        "tv":{"max":12.6, "min":10, "count":50, "type":"float"},
+    },
+    "mocked" : {"int": 5, "float":5.0}
+}
+
+class TestSimulateBatteryParamsClass(unittest.TestCase):
     """ this class contains methods to test methods in bms_sender """
     def __check_for_child_keys(self, bms_params):
         if set(["soc", "dod", "tem[", "tv"]) > set(bms_params.keys()):
             return False
         return True    
     
-    def __check_mocked_random_int_float(self, bms_params):
+    def __check_mocked_int_float_value(self, bms_params_list, BMS_PARAMS_THRESHOLD, key):
+        mocked_value = BMS_PARAMS_THRESHOLD["mocked"][BMS_PARAMS_THRESHOLD["test_params"][key]["type"]]
+        if len(set(bms_params_list)) == 1 or (list(set(bms_params_list))[0] == mocked_value):
+            return False
+        return True
+    
+    def __check_mocked_int_float(self, bms_params, BMS_PARAMS_THRESHOLD):
         for key in bms_params.keys():
-            if len(set(bms_params[key])) != 1:
+            if self.__check_mocked_int_float_value(bms_params[key], BMS_PARAMS_THRESHOLD, key):#len(set(bms_params[key])) != 1:
                 return False
         return True
     
     def __check_length(self, bms_params, BMS_PARAMS_THRESHOLD):
         for key in bms_params.keys():
-            if len(bms_params[key]) != BMS_PARAMS_THRESHOLD[key]["count"]:
+            if len(bms_params[key]) != BMS_PARAMS_THRESHOLD["test_params"][key]["count"]:
                 return False
         return True
         
     def __check_length_mocked_int_float(self, bms_params, BMS_PARAMS_THRESHOLD):
         if self.__check_length(bms_params, BMS_PARAMS_THRESHOLD):
-            if self.__check_mocked_random_int_float(bms_params):
+            if self.__check_mocked_int_float(bms_params, BMS_PARAMS_THRESHOLD):
                 return True
         return False
     
@@ -37,13 +68,10 @@ class TestBmsSenderClass(unittest.TestCase):
         """ this test case is to test send_to_console method """
         with patch('random.randint') as mock_randint,\
              patch('random.uniform') as mock_uniform:
-            mocked_int = 5
-            mocked_float = 5.0
-            mock_randint.return_value = mocked_int=5
-            mock_uniform.return_value = 5.0
-            from bms_code.bms_sensor_simulator import BMS_PARAMS_THRESHOLD, \
-                SimulateBatteryParamsClass
-            SimulateBatteryParamsClassObject = SimulateBatteryParamsClass(BMS_PARAMS_THRESHOLD)
+            mock_randint.return_value = BMS_PARAMS_THRESHOLD["mocked"]["int"]
+            mock_uniform.return_value = BMS_PARAMS_THRESHOLD["mocked"]["float"]
+            from bms_code.bms_sensor_simulator import SimulateBatteryParamsClass
+            SimulateBatteryParamsClassObject = SimulateBatteryParamsClass(BMS_PARAMS_THRESHOLD["test_params"])
             simulated_battery_params = SimulateBatteryParamsClassObject.get_battery_params()
             self.assertTrue(self.__validate_mocked_data(simulated_battery_params, BMS_PARAMS_THRESHOLD))
        

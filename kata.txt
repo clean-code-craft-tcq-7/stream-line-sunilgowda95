@@ -47,8 +47,10 @@ Breakdown:
                 "dod" : [<list of 40 values>],
                 "tv" : [<list of 40 values>]
             },
-            "ts" : <epoc time in utc>
+            "ts" : <epoc time in utc>,
+            "msg" : ""
         }
+        msg --> contains "success" if simulation is successfull, else contains "failure".
 
 Funtionalities from above Breakdown:
     simulate --> packetize --> send.

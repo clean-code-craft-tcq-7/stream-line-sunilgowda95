@@ -32,6 +32,29 @@ class SimulateBatteryParamsClass(object):
             if set(["max", "min", "count", "type"]) > set(bms_params_thresholds[key].items()):
                 return False
         return True
+
+    def __get_soc_dod_key(self, battery_params):
+        if "soc" in battery_params.keys():
+            return "soc"
+        return "dod"
+        
+    def __generate_soc_dod(self, battery_params):
+        # using soc / dod get other values
+        generated_values = []
+        key = self.__get_soc_dod_key(battery_params)
+        for each in battery_params[key]:
+            generated_values.append(abs(100-each))
+        return generated_values
+    
+    def __simulate_soc_dod(self, key, battery_params):
+        if "soc" in battery_params.keys() or "dod" in battery_params.keys():
+            return self.__generate_soc_dod(battery_params)
+        return self.__simulate_values(key)
+    
+    def __check_for_soc_doc_and_simulate(self, key, battery_params):
+        if key == "soc" or key == "dod":
+            return self.__simulate_soc_dod(key, battery_params)
+        return self.__simulate_values(key)
     
     def __simulate_values(self, key):
         values = []
@@ -55,5 +78,6 @@ class SimulateBatteryParamsClass(object):
         """ get array of each battery params """
         battery_params = {}
         for key in self.bms_params_thresholds.keys():
-            battery_params[key] = self.__simulate_values(key)
+            battery_params[key] = self.__check_for_soc_doc_and_simulate(key, battery_params)
+            # battery_params[key] = self.__simulate_values(key)
         return battery_params
