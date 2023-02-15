@@ -25,18 +25,18 @@ class TestFormatBatteryParamsClass(unittest.TestCase):
     INPUT_KEYS = ["soc", "dod", "temp", "tv"]
     OUTPUT_KEYS = ["batt_params", "ts", "message"]
     
-    def __check_output_parent_keys(self):
-        if set(self.OUTPUT_KEYS) <= set(self.output_json.keys()):
+    def __check_output_parent_keys(self, output_json):
+        if set(self.OUTPUT_KEYS) <= set(output_json.keys()):
             return False
         return True
 
-    def __check_output_batt_params_keys(self):
-        if set(self.INPUT_KEYS) <= set(self.output_json["batt_params"].keys()):
+    def __check_output_batt_params_keys(self, output_json):
+        if set(self.INPUT_KEYS) <= set(output_json["batt_params"].keys()):
             return True
         return False
     
-    def __check_output_batt_params_key_values(self, input):
-        for key, value in self.output_json["batt_params"].items():
+    def __check_output_batt_params_key_values(self, input, output_json):
+        for key, value in output_json["batt_params"].items():
             if input[key] != value:
                 return False
         return True
@@ -44,10 +44,10 @@ class TestFormatBatteryParamsClass(unittest.TestCase):
     def test_json_formatter_case0(self):
         input0 = {}
         FormatBatteryParamsObject0 = FormatBatteryParamsClass(input0)
-        self.output_json = json.loads(FormatBatteryParamsObject0.format_to_json_string())
-        self.assertTrue(self.__check_output_parent_keys())
-        self.assertEqual(self.output_json["msg"], "failed")
-        self.assertEqual(self.output_json["batt_params"], {})
+        output_json0 = json.loads(FormatBatteryParamsObject0.format_to_json_string())
+        self.assertTrue(self.__check_output_parent_keys(output_json0))
+        self.assertEqual(output_json0["msg"], "failed")
+        self.assertEqual(output_json0["batt_params"], {})
         
     def test_json_formatter_case1(self):
         input_list = [
@@ -60,17 +60,17 @@ class TestFormatBatteryParamsClass(unittest.TestCase):
         ]
         for input in input_list:
             FormatBatteryParamsObject1 = FormatBatteryParamsClass(input)
-            self.output_json = json.loads(FormatBatteryParamsObject1.format_to_json_string())
-            self.assertTrue(self.__check_output_parent_keys())
-            self.assertEqual(self.output_json["msg"], "failed")
-            self.assertEqual(self.output_json["batt_params"], {})
+            output_json1 = json.loads(FormatBatteryParamsObject1.format_to_json_string())
+            self.assertTrue(self.__check_output_parent_keys(output_json1))
+            self.assertEqual(output_json1["msg"], "failed")
+            self.assertEqual(output_json1["batt_params"], {})
             
     def test_json_formatter_case2(self):
         input2 = {"soc":[1,2,3], "dod":[1,2,3], "temp":[1,2,3], "tv":[1,2,3]}
         FormatBatteryParamsObject2 = FormatBatteryParamsClass(input2)
-        self.output_json = json.loads(FormatBatteryParamsObject2.format_to_json_string())
-        self.assertTrue(self.__check_output_parent_keys())
-        self.assertEqual(self.output_json["msg"], "success")
-        self.assertTrue(self.__check_output_batt_params_keys())
-        self.assertTrue(self.__check_output_batt_params_key_values(input2))
+        output_json2 = json.loads(FormatBatteryParamsObject2.format_to_json_string())
+        self.assertTrue(self.__check_output_parent_keys(output_json2))
+        self.assertEqual(output_json2["msg"], "success")
+        self.assertTrue(self.__check_output_batt_params_keys(output_json2))
+        self.assertTrue(self.__check_output_batt_params_key_values(input2, output_json2))
         
