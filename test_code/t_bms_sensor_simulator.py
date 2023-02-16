@@ -33,7 +33,7 @@ class TestSimulateBatteryParamsClass(unittest.TestCase):
     
     def __is_int_float_values_out_of_boundary(self, values_list, thresholds_dictionary):
         for each in values_list:
-            if self.__is_value_out_of_boundary(each, thresholds_dictionary):#if each > thresholds_dictionary["max"] or each < thresholds_dictionary["min"]:
+            if self.__is_value_out_of_boundary(each, thresholds_dictionary):
                 return True # out of bound values
         return False # no out of bound values
     
@@ -51,7 +51,7 @@ class TestSimulateBatteryParamsClass(unittest.TestCase):
     
     def __check_mocked_int_float(self, bms_params, BMS_PARAMS_THRESHOLD):
         for key in bms_params.keys():
-            if self.__check_mocked_int_float_value(bms_params[key], BMS_PARAMS_THRESHOLD, key):#len(set(bms_params[key])) != 1:
+            if self.__check_mocked_int_float_value(bms_params[key], BMS_PARAMS_THRESHOLD, key):
                 return False
         return True
     
