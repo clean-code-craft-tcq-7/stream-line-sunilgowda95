@@ -26,9 +26,14 @@ class TestSimulateBatteryParamsClass(unittest.TestCase):
             return False
         return True    
     
+    def __is_value_out_of_boundary(self, value, thresholds_dictionary):
+        if value > thresholds_dictionary["max"] or value < thresholds_dictionary["min"]:
+            return True # out of bound values
+        return False
+    
     def __is_int_float_values_out_of_boundary(self, values_list, thresholds_dictionary):
         for each in values_list:
-            if each > thresholds_dictionary["max"] or each < thresholds_dictionary["min"]:
+            if self.__is_value_out_of_boundary(each, thresholds_dictionary):#if each > thresholds_dictionary["max"] or each < thresholds_dictionary["min"]:
                 return True # out of bound values
         return False # no out of bound values
     
@@ -81,7 +86,14 @@ class TestSimulateBatteryParamsClass(unittest.TestCase):
             if self.__check_length_int_float(simulated_battery_params, BMS_PARAMS_THRESHOLD):
                 validation = True
         return validation
-        
+    
+    def __init_get_simulator_data(self, BMS_PARAMS_THRESHOLD):    
+        from bms_code.bms_sensor_simulator import SimulateBatteryParamsClass
+        test_input = copy.deepcopy(BMS_PARAMS_THRESHOLD["test_params"])
+        del(test_input["dod"])
+        SimulateBatteryParamsClassObject = SimulateBatteryParamsClass(test_input)
+        return SimulateBatteryParamsClassObject.get_battery_params()
+                    
     
     def test_get_battery_params_1(self):
         BMS_PARAMS_THRESHOLD = {
@@ -98,11 +110,7 @@ class TestSimulateBatteryParamsClass(unittest.TestCase):
              patch('random.uniform') as mock_uniform:
             mock_randint.return_value = BMS_PARAMS_THRESHOLD["mocked"]["int"]
             mock_uniform.return_value = BMS_PARAMS_THRESHOLD["mocked"]["float"]
-            from bms_code.bms_sensor_simulator import SimulateBatteryParamsClass
-            test_input = copy.deepcopy(BMS_PARAMS_THRESHOLD["test_params"])
-            del(test_input["dod"])
-            SimulateBatteryParamsClassObject = SimulateBatteryParamsClass(test_input)
-            simulated_battery_params = SimulateBatteryParamsClassObject.get_battery_params()
+            simulated_battery_params = self.__init_get_simulator_data(BMS_PARAMS_THRESHOLD)
             self.assertTrue(self.__validate_mocked_data(simulated_battery_params, BMS_PARAMS_THRESHOLD))
 
     def test_get_battery_params_2_3(self):
@@ -125,10 +133,6 @@ class TestSimulateBatteryParamsClass(unittest.TestCase):
         }]
         for BMS_PARAMS_THRESHOLD in input_2_3:
             """ this test case is to test send_to_console method """
-            from bms_code.bms_sensor_simulator import SimulateBatteryParamsClass
-            test_input = copy.deepcopy(BMS_PARAMS_THRESHOLD["test_params"])
-            del(test_input["dod"])        
-            SimulateBatteryParamsClassObject = SimulateBatteryParamsClass(test_input)
-            simulated_battery_params = SimulateBatteryParamsClassObject.get_battery_params()
+            simulated_battery_params = self.__init_get_simulator_data(BMS_PARAMS_THRESHOLD)
             self.assertTrue(self.__validate_data(simulated_battery_params, BMS_PARAMS_THRESHOLD))
        
