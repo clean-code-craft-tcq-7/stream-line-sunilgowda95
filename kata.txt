@@ -43,9 +43,10 @@ Breakdown:
     5. Packet : JSON format.
         {
             "batt_params" : {
-                "soc" : [<list of 40 values>],
-                "dod" : [<list of 40 values>],
-                "tv" : [<list of 40 values>]
+                "soc" : [<list of 50 values>],
+                "dod" : [<list of 50 values>],
+                "temp" : [<list of 50 values>],
+                "tv" : [<list of 50 values>]
             },
             "ts" : <epoc time in utc>,
             "msg" : ""
