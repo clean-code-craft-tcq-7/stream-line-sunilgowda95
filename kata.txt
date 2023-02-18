@@ -78,3 +78,33 @@ Integration Test:
 References:
     1. More information on the battery parameters can be found in :
       http://web.mit.edu/evt/summary_battery_specifications.pdf
+
+Receiver Implementation:
+    1. Identified the sender console output format of battery parameters
+    2. Implement statistics compute function for each parameters
+    3. Output of the receiver designed in below format
+    JSON format
+    {
+        "batt_params": {
+            "soc": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            },
+            "dod": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            },
+            "temp": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            },
+            "tv": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            }
+        }
+    }
