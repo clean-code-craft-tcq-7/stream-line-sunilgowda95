@@ -1,3 +1,7 @@
+import os.path
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import json
 from bms_code.bms_receiver_statistics import BatteryParameterStatistics
 

@@ -1,5 +1,9 @@
 """ This file simulates battery parameters and sends to console in a predefined format """
 # user defined modules
+import os.path
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from bms_code.bms_sensor_simulator import BMS_PARAMS_THRESHOLD, SimulateBatteryParamsClass
 from bms_code.bms_params_json_formatter import FormatBatteryParamsClass
 
