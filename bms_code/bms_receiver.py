@@ -21,3 +21,9 @@ def get_statistics_in_json(battery_params_json_string):
 
 def print_statistics(battery_params_json_string):
     print(get_statistics_in_json(battery_params_json_string))
+
+def read_sender_input():
+    return input()
+
+if __name__ == '__main__':
+    print_statistics(read_sender_input())

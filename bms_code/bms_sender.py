@@ -17,3 +17,6 @@ def bms_generate_format_send():
     # send the data to receiver
     send_to_console(fomatted_battery_params_to_json_string)
     return
+
+if __name__ == '__main__':
+    bms_generate_format_send()
