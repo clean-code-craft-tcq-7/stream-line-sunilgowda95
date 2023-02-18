@@ -30,4 +30,6 @@ def read_sender_input():
     return input()
 
 if __name__ == '__main__':
-    print_statistics(read_sender_input())
+    sensor_readings = read_sender_input()
+    print("Readings from Sender:-", sensor_readings, "Statistics :-", sep="\n\n")
+    print_statistics(sensor_readings)
