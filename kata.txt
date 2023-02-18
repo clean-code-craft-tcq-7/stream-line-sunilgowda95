@@ -1,0 +1,110 @@
+Requirement:
+
+ Sender:
+    - simulates and sends at least two Battery / Charging parameters
+    - sends fifty readings in a stream
+    - can either generate values for the parameters, or read from a file
+    - uses console output to communicate the parameters.
+
+Breakdown:
+    1. Battery parameters
+        1.1 SOC - State Of Charge : An expression of the present battery capacity as a
+            percentage of maximum capacity. 
+        1.2 DOD - Depth Of Discharge : he percentage of battery capacity that has been
+            discharged expressed as a percentage of maximum capacity.
+        1.3 Terminal Voltage : The voltage between the battery terminals with load applied.
+        1.4 Temperature: Temperature can have an impact on batteries performance and lifespan.
+
+        Following CSV file list all the values for a typical 12V battery (used as reference 
+        for simulation).
+            Temperature (°C),State of Charge (%),Depth of Discharge (%),Terminal Voltage (V)
+            25-27,100,0,12.6
+            26-28,90,10,12.4
+            27-29,80,20,12.2
+            28-30,70,30,12.0
+            29-31,60,40,11.8
+            30-32,50,50,11.6
+            31-33,40,60,11.4
+            32-34,30,70,11.2
+            33-35,20,80,11.0
+            34-36,10,90,10.8
+            35-37,0,100,10.6
+    2. Sender to send 50 values of each parameters in a packet. 
+            Following the range of each parameters used in simulation.
+            SOC - 100 to 0 %
+            DOD - 0 to 100 % 
+                SOC and DOD are mutually opposite.
+            Temperature - 25 - 40 celcius
+                assumming valid operating Temperature
+            Terminal Voltage - 12.6 to 10 Volts.
+    3. Simulate using ranges and assumptions defined above.
+    4. Encapsulate Console Print in a function.
+       Use Print to send data. Monkey patch print for unit testing.
+    5. Packet : JSON format.
+        {
+            "batt_params" : {
+                "soc" : [<list of 50 values>],
+                "dod" : [<list of 50 values>],
+                "temp" : [<list of 50 values>],
+                "tv" : [<list of 50 values>]
+            },
+            "ts" : <epoc time in utc>,
+            "msg" : ""
+        }
+        msg --> contains "success" if simulation is successfull, else contains "failure".
+
+Funtionalities from above Breakdown:
+    simulate --> packetize --> send.
+    1. simulate : 
+        Input - range for each values.
+        Output - 50 values for every invocation within the range.
+    2. packetize :
+        Input - range of 50 values.
+        Output - JSON formatted output.
+    3. Send:
+        Input - string
+        Output - None
+
+Data-Driven Test Cases:
+    Use JSON document for Input and Output.
+    1. t_simulate --> Initiate the simulate class and test values retuned by simute function.
+    2. t_packetize --> Send range of values and test packetizing as per the defined format.
+
+Integration Test:
+    Use JSON document for Input and Output.
+    1. Mock/Stub send function.
+    2. Initiate sender and validate JSON packet sent to console.
+
+References:
+    1. More information on the battery parameters can be found in :
+      http://web.mit.edu/evt/summary_battery_specifications.pdf
+
+Receiver Implementation:
+    1. Identified the sender console output format of battery parameters
+    2. Implement statistics compute function for each parameters
+    3. Output of the receiver designed in below format
+    JSON format
+    {
+        "batt_params": {
+            "soc": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            },
+            "dod": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            },
+            "temp": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            },
+            "tv": {
+            "maxVal": "maximum_value",
+            "minVal": "minimum_value",
+            "SMAVal": "simple_moving_average_value"
+            }
+        }
+    }

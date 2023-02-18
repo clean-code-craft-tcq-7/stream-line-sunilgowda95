@@ -1,0 +1,19 @@
+# This workflow is for integration between sender and receiver
+
+name: Integration for Sender and Receiver
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Run
+      run: python bms_code/bms_sender.py | python bms_code/bms_receiver.py
